@@ -1,15 +1,29 @@
 import { useContext } from "react";
-import { TextInput } from "../../components";
+import { Select } from "../../components";
+import { compare } from "../../utils";
 import { AppContext } from "../AppContext";
 
 export function CurrentPersonaInput() {
     const {
-        setCurrentPersona
+        setCurrentPersona,
+        persona
     } = useContext(AppContext)
     const handleBlur = (e) => {
-        setCurrentPersona(e.target.value)
+        setCurrentPersona(e.target.value);
     }
+    const options = persona
+    .filter((p) => p.arcana !== "Treasure")
+    .map((p) => {
+        return {
+            label: p.name,
+            value: p.name
+        }
+    }).sort((a, b) => compare(a, b, "value"));
+    options.unshift({
+        label: '---',
+        value: '---'
+    })
     return (
-        <TextInput label='Current persona' id='currentPersona' onBlur={handleBlur}/>
+        <Select label='Current persona' id='currentPersona' options={options} onBlur={handleBlur} />
     );
 }

@@ -1,15 +1,30 @@
-import { useContext } from "react";
-import { TextInput } from "../../components";
+import { useContext, useEffect } from "react";
+import { NumberInput } from "../../components";
 import { AppContext } from "../AppContext";
 
 export function JokerLevelInput() {
+    const max = 99;
+    const min = 1;
     const {
         setJokerLevel
     } = useContext(AppContext)
+
     const handleBlur = (e) => {
-        setJokerLevel(e.target.value)
+        if (e.target.value < min) {
+            e.target.value = min;
+        }
+        if (e.target.value > max) {
+            e.target.value = max;
+        }
+        setJokerLevel(parseInt(e.target.value));
     }
+
+    useEffect(() => {
+        setJokerLevel(max)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
-        <TextInput label={"Joker's level"} id='jokerLevel' onBlur={handleBlur}/>
+        <NumberInput label={"Joker's level"} id='jokerLevel' onBlur={handleBlur} max={max} min={min} value={min} defaultValue={max}/>
     );
 }

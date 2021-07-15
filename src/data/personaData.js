@@ -2011,7 +2011,7 @@ module.exports = {
                         "level": 27
                     },
                     {
-                        "name": "Orthus",
+                        "name": "Orthrus",
                         "level": 21
                     }
                 ],
@@ -2420,7 +2420,7 @@ module.exports = {
             "fusions": [
                 [
                     {
-                        "name": "Nebrios",
+                        "name": "Nebiros",
                         "level": 55
                     },
                     {

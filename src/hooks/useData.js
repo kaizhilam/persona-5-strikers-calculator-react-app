@@ -68,13 +68,19 @@ export function useData() {
         const cleanResult = result.join(' → ');
         if (cleanResult) {
             setResult(`${data.currentPersona} → ${cleanResult}`)
+        } else {
+            setResult('None');
         }
     }
+    const persona = PERSONA_DATA.persona;
+    const skill = PERSONA_DATA.skills;
     return {
+        calculate,
         data,
+        persona,
         setCurrentPersona,
         setJokerLevel,
         setTargetPersona,
-        calculate,
+        skill
     }
 }
