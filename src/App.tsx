@@ -1,23 +1,51 @@
-import React from 'react';
-import { Spacer } from './components';
+import React, { useState } from 'react';
+import { Page } from './components';
 import { CalculateButton, CurrentPersonaInput, JokerLevelInput, Result, TargetPersonaInput, Title } from './specifics';
-import { useData } from './hooks/useData';
 import { AppContextProvider } from './specifics/AppContext';
+import PERSONA_DATA from './data/personaData';
 
 function App() {
-  const data = useData();
+  const [result, setResult] = useState([]);
+
+  const [data, setData] = useState({
+    persona: PERSONA_DATA.persona,
+    skills: PERSONA_DATA.skills,
+    jokerLevel: 99,
+    currentPersona: undefined,
+    targetPersona: undefined,
+  });
+
+  const setJokerLevel = (value) => {
+    setData({
+      ...data,
+      jokerLevel: value,
+    });
+  };
+
+  const setCurrentPersona = (value) => {
+    setData({
+      ...data,
+      currentPersona: value,
+    });
+  };
+
+  const setTargetPersona = (value) => {
+    setData({
+      ...data,
+      targetPersona: value,
+    });
+  };
+
   return (
     <AppContextProvider value={data}>
-      <Title />
-      <JokerLevelInput />
-      <Spacer />
-      <CurrentPersonaInput />
-      <Spacer />
-      <TargetPersonaInput />
-      <Spacer />
-      <CalculateButton />
-      <Spacer />
-      <Result />
+      <Page>
+        <Title />
+        <JokerLevelInput setJokerLevel={setJokerLevel} />
+        <CurrentPersonaInput setCurrentPersona={setCurrentPersona} />
+        <TargetPersonaInput setTargetPersona={setTargetPersona} />
+        <CalculateButton setResult={setResult} />
+        <Result result={result} />
+      </Page>
     </AppContextProvider>
   );
 }

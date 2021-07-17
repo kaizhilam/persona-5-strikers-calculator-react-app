@@ -1,36 +1,36 @@
-import React from 'react';
-import { useContext, useEffect } from 'react';
-import { NumberInput } from '../../components';
-import { AppContext } from '../AppContext';
+import React, { useEffect, useRef, useState } from 'react';
+import { Input } from '../../components';
 
-export function JokerLevelInput() {
-  const max = 99;
-  const min = 1;
-  const { setJokerLevel } = useContext(AppContext);
+interface IJokerLevelInput {
+  setJokerLevel: (value: number) => void;
+}
 
-  const handleBlur = (e) => {
-    if (e.target.value < min) {
-      e.target.value = min;
+export function JokerLevelInput(props: IJokerLevelInput) {
+  const { setJokerLevel } = props;
+  const [errorMessage, setErrorMessage] = useState(undefined);
+  const onBlur = (e) => {
+    const value = parseInt(e.target.value);
+    if (value > 99 || value < 1) {
+      setErrorMessage('Value must be in between 1 and 99');
+    } else {
+      setErrorMessage(undefined);
+      setJokerLevel(parseInt(e.target.value));
     }
-    if (e.target.value > max) {
-      e.target.value = max;
-    }
-    setJokerLevel(parseInt(e.target.value));
   };
-
+  const inputRef = useRef(null);
   useEffect(() => {
-    setJokerLevel(max);
+    inputRef.current.value = 99;
   }, []);
-
   return (
-    <NumberInput
-      label={"Joker's level"}
-      id="jokerLevel"
-      onBlur={handleBlur}
-      max={max}
-      min={min}
-      value={min}
-      defaultValue={max}
+    <Input
+      id="jokerLevelInput"
+      label="Joker's level"
+      max={99}
+      min={1}
+      type="number"
+      errorMessage={errorMessage}
+      onBlur={onBlur}
+      inputRef={inputRef}
     />
   );
 }

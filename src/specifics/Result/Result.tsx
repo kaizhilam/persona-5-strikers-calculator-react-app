@@ -1,10 +1,18 @@
 import React from 'react';
-import { useContext } from 'react';
 import { Paragraph } from '../../components';
-import { AppContext } from '../AppContext';
 
-export function Result() {
-  const { data } = useContext(AppContext);
-  const toReturn = `Result: ${data.result}`;
+interface IResult {
+  result: string[];
+}
+
+export function Result(props: IResult) {
+  const { result } = props;
+  let toReturn = 'Result';
+  if (result.length === 1) {
+    toReturn = `Result: ${result}`;
+  } else if (result.length > 1) {
+    const resultToDisplay = result.join('→');
+    toReturn = `Result: ${resultToDisplay}`;
+  }
   return <Paragraph>{toReturn}</Paragraph>;
 }

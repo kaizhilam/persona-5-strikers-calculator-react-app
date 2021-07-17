@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useContext } from 'react';
 import { Select } from '../../components';
-import { compare } from '../../utils';
+import { compare, SELECT_EMPTY } from '../../utils';
 import { AppContext } from '../AppContext';
 
-export function CurrentPersonaInput() {
-  const { setCurrentPersona, persona } = useContext(AppContext);
-  const handleBlur = (e) => {
-    setCurrentPersona(e.target.value);
-  };
+interface ICurrentPersonaInput {
+  setCurrentPersona: (value: string) => void;
+}
+
+export function CurrentPersonaInput(props: ICurrentPersonaInput) {
+  const { setCurrentPersona } = props;
+  const { persona, jokerLevel } = useContext(AppContext);
+  const [errorMessage, setErrorMessage] = useState(undefined);
+
   const options = persona
     .filter((p) => p.arcana !== 'Treasure')
+    .filter((p) => p.level <= jokerLevel)
     .map((p) => {
       return {
         label: p.name,
@@ -19,8 +24,36 @@ export function CurrentPersonaInput() {
     })
     .sort((a, b) => compare(a, b, 'value'));
   options.unshift({
-    label: '---',
-    value: '---',
+    label: SELECT_EMPTY,
+    value: SELECT_EMPTY,
   });
-  return <Select label="Current persona" id="currentPersona" options={options} onBlur={handleBlur} />;
+
+  const selectRef = useRef(null);
+
+  const onBlur = () => {
+    if (selectRef.current.value === SELECT_EMPTY) {
+      setErrorMessage('Cannot be empty');
+      setCurrentPersona(undefined);
+    } else {
+      setErrorMessage('');
+      setCurrentPersona(selectRef.current.value);
+    }
+  };
+
+  useEffect(() => {
+    selectRef.current.value = SELECT_EMPTY;
+    setCurrentPersona(undefined);
+    setErrorMessage(undefined);
+  }, [jokerLevel]);
+
+  return (
+    <Select
+      label="Current persona"
+      id="currentPersona"
+      options={options}
+      onBlur={onBlur}
+      errorMessage={errorMessage}
+      selectRef={selectRef}
+    />
+  );
 }

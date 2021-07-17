@@ -1,12 +1,11 @@
 import React from 'react';
 
 interface IAppContext {
-  persona?: any;
-  setTargetPersona?: any;
-  setJokerLevel?: any;
-  setCurrentPersona?: any;
-  calculate?: any;
-  data?: any;
+  persona?: any[];
+  jokerLevel?: number;
+  skills?: any[];
+  currentPersona?: string;
+  targetPersona?: string;
 }
 
 export const AppContext = React.createContext<IAppContext>({});
